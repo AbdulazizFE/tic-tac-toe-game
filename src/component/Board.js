@@ -9,6 +9,7 @@ export class Board extends React.Component {
     this.state = {
       squares: Array(9).fill(null),
       xIsNext: true,
+      timer:20,
     };
   }
   handleClick(i) {
@@ -33,12 +34,16 @@ export class Board extends React.Component {
       xIsNext: true,
     });
   };
+
   render() {
     const winner = calculateWinner(this.state.squares);
+    const isBoardFull = this.state.squares.every((square) => square != null);
     let status;
 
     if (winner) {
       status = "Winner: " + winner;
+    } else if (isBoardFull) {
+      status = "It's a draw!";
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
@@ -46,23 +51,23 @@ export class Board extends React.Component {
     return (
       <div className="board container">
         <div className={`status ${winner ? "winner" : ""}`}>{status}</div>
-        <div className="board-row">
+        <div className="board-row container">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
           {this.renderSquare(2)}
         </div>
-        <div className="board-row">
+        <div className="board-row container">
           {this.renderSquare(3)}
           {this.renderSquare(4)}
           {this.renderSquare(5)}
         </div>
-        <div className="board-row">
+        <div className="board-row container">
           {this.renderSquare(6)}
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
 
-        {winner && (
+        {(winner || isBoardFull) && (
           <button className="play-again" onClick={this.handlePlayAgain}>
             Play Again
           </button>
